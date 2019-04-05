@@ -43,9 +43,9 @@ app.get('/madlib/:id', function(req,res) {
       throw err
     }
     madlib = result.rows[0]
-    madlib.madlib = madlib.madlib.replace(/\n/,"</p><p>")
-    madlib.madlib = madlib.madlib.replace(/\[/,"<input placeholder='")
-    madlib.madlib = madlib.madlib.replace(/\]/,"'/>")
+    madlib.madlib = madlib.madlib.replace(/\n/g,"</p><p>")
+    madlib.madlib = madlib.madlib.replace(/\[/g,"<input placeholder='")
+    madlib.madlib = madlib.madlib.replace(/\]/g,"'/>")
     res.render('show', {madlib:madlib})
   })
 })
