@@ -1,0 +1,16 @@
+<html>
+
+<head>
+  <title>FanimadLibs</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+    <p><a href="/new">new madlib</a></p>
+    <h1>FanimadLibs</h1>
+  <% madlibs.forEach(function(madlib){ %>
+    <p><a href="/madlib/<%= madlib.id %>"><%= madlib.title %></a></p>
+  <% }); %>
+</body>
+
+</html>

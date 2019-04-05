@@ -1,0 +1,9 @@
+<div><h1>Preview:</h1>
+<p id="preview"><p></div>
+<script>
+  raw = window.location.href.split('?')[1];
+  parsed = "<p>" + raw.replace(/\%0A/gi, "</p><p>") + "</p>"
+  res = decodeURI(parsed)
+  element = document.getElementById("preview")
+  element.innerHTML = res;
+</script>
