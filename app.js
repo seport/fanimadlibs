@@ -42,7 +42,11 @@ app.get('/madlib/:id', function(req,res) {
     if (err) {
       throw err
     }
-    res.render('show', {madlib:result.rows[0]})
+    madlib = result.rows[0]
+    madlib.madlib = madlib.madlib.replace(/\n/,"</p><p>")
+    madlib.madlib = madlib.madlib.replace(/\[/,"<input placeholder='")
+    madlib.madlib = madlib.madlib.replace(/\]/,"'/>")
+    res.render('show', {madlib:madlib})
   })
 })
 
