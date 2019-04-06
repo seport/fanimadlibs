@@ -10,8 +10,9 @@
     <label>
       <p>Category:</p>
       <select name="category">
-        <option value="1" <%= madlib.category == 1 ? "selected" : "" %>>one category</option>
-        <option value="2" <%= madlib.category == 2 ? "selected" : "" %>>another category</option>
+        <% categories.forEach(function(category){ %>
+          <option value="<%= category.id %>" <%= madlib.category == category.id ? "selected" : "" %>><%= category.name %></option>
+        <% }); %>
       </select>
     </label>
   </div>

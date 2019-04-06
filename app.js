@@ -24,17 +24,37 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const categories = [
+  { id: 1, name: 'Current Season' },
+  { id: 2, name: 'Oldies/Nostalgia' },
+  { id: 3, name: "Boy's Love" },
+  { id: 4, name: 'Fanservice/Moe' },
+  { id: 5, name: 'Shoujo/Romance' },
+  { id: 6, name: 'Shounen/Action' },
+  { id: 7, name: 'Dank Memes' },
+];
+
+const madlibsByCategory = categories.map(c => ({ ...c, madlibs: [] }));
+
+const categorizeMadlib = (acc, madlib) => {
+  acc
+    .find(c => c.id === madlib.category).madlibs
+    .push(madlib);
+  return acc;
+};
+
 app.get('/', (_req, res) => {
   db.query('SELECT * FROM madlibs', (err, results) => {
     if (err) {
       return res.render('error');
     }
-    return res.render('index', { madlibs: results.rows });
+    const madlibs = results.rows.reduce(categorizeMadlib, madlibsByCategory);
+    return res.render('index', { madlibs });
   });
 });
 
 app.get('/madlibs/new', (_req, res) => {
-  res.render('new');
+  res.render('new', { categories });
 });
 
 app.get('/madlibs/:id', (req, res) => {
@@ -55,7 +75,7 @@ app.get('/madlibs/:id/edit', (req, res) => {
     if (err) {
       return res.render('error');
     }
-    return res.render('edit', { madlib: result.rows[0] });
+    return res.render('edit', { madlib: result.rows[0], categories });
   });
 });
 
