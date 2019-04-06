@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function(req,res) {
   db.query('SELECT * FROM madlibs', (err, results) => {
     if (err) {
-      throw err
+      return res.render('error');
     }
     console.log(results.rows)
     res.render('index', {madlibs:results.rows});
@@ -37,7 +37,7 @@ app.get('/', function(req,res) {
 app.get('/madlib/:id', function(req,res) {
   db.query('SELECT * FROM madlibs WHERE id = $1', [req.params.id], (err,result) => {
     if (err) {
-      throw err
+      return res.render('error');
     }
     madlib = result.rows[0]
     madlib.madlib = madlib.madlib.replace(/\n/g,"</p><p>")
@@ -54,7 +54,7 @@ app.get('/new', function(req,res) {
 app.get('/edit/:id', function(req,res) {
   db.query('SELECT * FROM madlibs WHERE id = $1', [req.params.id], (err,result) => {
     if (err) {
-      throw err
+      return res.render('error');
     }
     res.render('edit', {madlib:result.rows[0]})
   })
@@ -66,7 +66,7 @@ app.post('/update/:id', function(req,res) {
     [req.body.title, req.body.category, req.body.madlib, req.params.id],
     (err, result) => {
       if (err) {
-        throw err
+        return res.render('error');
       }
       res.redirect(`/madlib/${req.params.id}`)
     }
@@ -76,7 +76,7 @@ app.post('/update/:id', function(req,res) {
 app.post('/create', upload.array(), function(req,res) {
   db.query('INSERT INTO madlibs (title, category, madlib) VALUES ($1, $2, $3) RETURNING *', [req.body.title, req.body.category, req.body.madlib], (err, result) => {
     if (err) {
-      throw err
+      return res.render('error');
     }
     res.redirect(`/madlib/${result.rows[0].id}`)
   })
