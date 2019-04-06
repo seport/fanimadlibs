@@ -1,0 +1,25 @@
+<form action="<%= madlib.id ? `/update/${madlib.id}` : '/create' %>" method="post">
+  <div>To indicate a field use the following syntax: [word type]</div>
+  <div>
+    <label>
+      <p>Title:</p>
+      <input id="title" name="title" value="<%= madlib.title %>"/>
+    </label>
+  </div>
+  <div>
+    <label>
+      <p>Category:</p>
+      <select name="category">
+        <option value="1" <%= madlib.category == 1 ? "selected" : "" %>>one category</option>
+        <option value="2" <%= madlib.category == 2 ? "selected" : "" %>>another category</option>
+      </select>
+    </label>
+  </div>
+  <div>
+    <label>
+      <p>Madlib:</p>
+      <textarea id="madlib" name="madlib"><%= madlib.madlib %></textarea>
+    </label>
+  </div>
+  <button>Submit</button>
+</form>

@@ -24,9 +24,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
 app.get('/', function(req,res) {
   db.query('SELECT * FROM madlibs', (err, results) => {
     if (err) {
@@ -51,7 +48,7 @@ app.get('/madlib/:id', function(req,res) {
 })
 
 app.get('/new', function(req,res) {
-  res.sendfile('public/form.html');
+  res.render('new');
 });
 
 app.get('/edit/:id', function(req,res) {
@@ -74,10 +71,6 @@ app.post('/update/:id', function(req,res) {
       res.redirect(`/madlib/${req.params.id}`)
     }
   )
-})
-
-app.get('/preview', function(req,res) {
-  res.sendfile('public/preview.html');
 })
 
 app.post('/create', upload.array(), function(req,res) {

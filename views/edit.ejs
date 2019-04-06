@@ -1,39 +1,5 @@
 <link rel="stylesheet" href="/stylesheets/style.css">
 
+<p><a href="/madlib/<%= madlib.id %>">back</a></p>
 <h1>Edit Madlib</h1>
-<form action="/update/<%= madlib.id %>" method="post">
-  <div>To indicate a field use the following syntax: [word type]</div>
-  <div>
-    <label>
-      <p>Title:</p>
-      <input id="title" name="title" value="<%= madlib.title %>"/>
-    </label>
-  </div>
-  <div>
-    <label>
-      <p>Category:</p>
-      <select name="category">
-        <option value="1" <%= madlib.category == 1 ? "selected" : "" %>>one category</option>
-        <option value="2" <%= madlib.category == 2 ? "selected" : "" %>>another category</option>
-      </select>
-    </label>
-  </div>
-  <div>
-    <label>
-      <p>Madlib:</p>
-      <textarea id="madlib" name="madlib"><%= madlib.madlib %></textarea>
-    </label>
-  </div>
-  <button type="button" onclick="preview()" hidden>Preview</button><button>Submit</button>
-</form>
-
-<script>
-function preview() {
-  encoded_madlib = encodeURI(document.getElementById("madlib").value)
-  window.open(`/preview?${encoded_madlib}`,
-    'pagename',
-    'resizable,height=600,width=800'
-  );
-  return false;
-}
-</script>
+<%- include('form', {madlib: madlib}); %>
