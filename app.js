@@ -34,16 +34,16 @@ const categories = [
   { id: 7, name: 'Dank Memes' },
 ];
 
-const madlibsByCategory = categories.map(c => ({ ...c, madlibs: [] }));
-
-const categorizeMadlib = (acc, madlib) => {
-  acc
-    .find(c => c.id === madlib.category).madlibs
-    .push(madlib);
-  return acc;
-};
-
 app.get('/', (_req, res) => {
+  const categorizeMadlib = (acc, madlib) => {
+    acc
+      .find(c => c.id === madlib.category).madlibs
+      .push(madlib);
+    return acc;
+  };
+
+  const madlibsByCategory = categories.map(c => ({ ...c, madlibs: [] }));
+
   db.query('SELECT * FROM madlibs', (err, results) => {
     if (err) {
       return res.render('error');
@@ -66,7 +66,7 @@ app.get('/madlibs/:id', (req, res) => {
     madlib.madlib = madlib.madlib.replace(/\n/g, '</p><p>');
     madlib.madlib = madlib.madlib.replace(/\[/g, "<input placeholder='");
     madlib.madlib = madlib.madlib.replace(/\]/g, "'/>");
-    return res.render('show', { madlib });
+    return res.render('show', { madlib, categories });
   });
 });
 

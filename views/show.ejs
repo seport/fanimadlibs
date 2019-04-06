@@ -5,4 +5,4 @@
 <p>
   <%- madlib.madlib %>
 </p>
-<small>category: <%= madlib.category %></small>
+<small>category: <%= categories.find(c => c.id == madlib.category).name %></small>
