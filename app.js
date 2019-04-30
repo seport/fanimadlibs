@@ -101,5 +101,8 @@ app.post('/madlibs', upload.array(), (req, res) => {
   });
 });
 
+app.get('/play', (_req, res) => {
+  res.render('play');
+});
 
 module.exports = app;
