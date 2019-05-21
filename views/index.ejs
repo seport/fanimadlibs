@@ -1,19 +1,11 @@
-<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+<script src="/javascripts/player.js"></script>
+<link rel="stylesheet" href="/stylesheets/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<head>
-  <title>FanimadLibs</title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
-</head>
-
-<body>
-    <p><a href="/madlibs/new">new madlib</a></p>
-    <h1>FanimadLibs</h1>
-    <% madlibs.forEach(function(category){ %>
-      <h4><%= category.name %></h4>
-      <% category.madlibs.forEach(function(madlib){ %>
-        <p><a href="/madlibs/<%= madlib.id %>"><%= madlib.title %></a></p>
-      <% }); %>
-    <% }); %>
-</body>
-
-</html>
+<div class="comment-scroller-container">
+  <div class="comment-scroller">
+    <input id="comment-message" />
+    <button id="comment-button" onclick="comment()">comment</button>
+  </div>
+</div>

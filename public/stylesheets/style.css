@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Varela+Round&display=swap');
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* padding: 50px; */
+  padding: 0;
+  margin: 0;
+  font: 14px "Roboto", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -25,7 +29,7 @@ textarea {
   -webkit-text-stroke: 2px black;
 }
 
-.play {
+.comment-scroller {
   max-width: 500px;
   max-height: 200px;
   display: flex;
@@ -69,4 +73,137 @@ textarea {
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 0.5em;
   margin-bottom: 0.5em;
+}
+
+.play-container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-image: url('/images/background.gif')
+}
+
+.btn-genre {
+  background: salmon;
+  border: 4px solid rgba(256,256,256,0.75);
+  border-radius: 35px;
+  height: 85px;
+  width: 300px;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: 'Varela Round', sans-serif;
+  margin: 10px;
+  -webkit-box-shadow: 0px 0px 0px 1px rgba(117,117,117,1);
+  -moz-box-shadow: 0px 0px 0px 1px rgba(117,117,117,1);
+  box-shadow: 0px 0px 0px 1px rgba(117,117,117,1);
+}
+
+.btn-genre span {
+  opacity: 0.65;
+}
+
+.btn-genre-2 {
+  background: #cc6666;
+}
+
+.btn-genre-6 {
+  background: #99cc99;
+}
+
+.btn-genre-1 {
+  background: #666699;
+}
+
+.btn-genre-3 {
+  background: #9999cc;
+}
+
+.btn-genre-5 {
+  background: #cc6699;
+}
+
+.btn-genre-7 {
+  background: #cccc66;
+}
+
+.btn-genre-4 {
+  background: #99cccc;
+}
+
+@keyframes rotating {
+  0% {transform: rotate(-10deg);}
+  50% {transform: rotate(10deg);}
+  100% {transform: rotate(-10deg);}
+}
+
+.rotating {
+  display: inline-block;
+  animation: rotating 4s infinite;
+}
+
+.ohshit {
+  height: 0px;
+  font-family: "Comic Sans MS";
+  font-size: 35px;
+  margin-top: -10px;
+  margin-left: -300px;
+  -webkit-text-stroke: 2px white;
+}
+
+.ohshitright {
+  height: 0px;
+  font-family: "Comic Sans MS";
+  font-size: 35px;
+  margin-top: -20px;
+  margin-right: -350px;
+  -webkit-text-stroke: 2px white;
+}
+
+.madlib-container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-image: url('/images/background.png');
+}
+
+.id1{
+  text-align: left;
+  font-size: 0;
+  width: 275px;
+  border: 5px pink solid;
+  background-color: white;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 10px;
+  padding: 5px;
+  -webkit-box-shadow: 0px 0px 0px 1px rgba(117,117,117,1);
+  -moz-box-shadow: 0px 0px 0px 1px rgba(117,117,117,1);
+  box-shadow: 0px 0px 0px 1px rgba(117,117,117,1);
+  }
+
+  .id1 input {
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .id1.hide-madlib input {
+    width: 100%;
+  }
+
+  .id1 h1{
+    /* font-size: 20px; */
+    font-family: 'Varela Round', sans-serif;
+  }
+
+.show-madlib {
+  font-size: 18px; width: 600px;
+}
+
+.hidden {
+  display: none;
 }

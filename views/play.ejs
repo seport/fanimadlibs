@@ -1,11 +1,32 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
-<script src="/javascripts/player.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script> -->
+<!-- <script src="/javascripts/player.js"></script> -->
 <link rel="stylesheet" href="/stylesheets/style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
-<div class="play-container">
-  <div class="play">
-    <input id="comment-message" />
-    <button id="comment-button" onclick="comment()">comment</button>
+<div class="">
+  <div class="play-container">
+    <h4 class="ohshit">oh shit it's back...</h4>
+    <img src="/images/fanimadlibs.png" />
+    <h4 class="rotating ohshitright">v.2.0!!!</h4>
+      <% madlibs.forEach(function(category){ %>
+          <button class="btn btn-genre btn-genre-<%= category.id %>">
+            <span><%= category.name %></span>
+          </button>
+      <% }); %>
+  </div>
+  <div class="madlib-container hidden">
+    <div class="id1 hide-madlib">
+      <h1>Sarazanmai</h1>
+      <p>
+        Kazuki Yasaka, an <input placeholder="number">th grader living in Asakusa, is turned into a <input placeholder="mythical creature"> along with his classmates Toi and Enta by a mysterious creature named Keppi, after they break inadvertently a statue of a <input placeholder="same mythical creature">, the guardian god of the city.
+      </p><p>
+      </p><p>They are then ordered by Keppi, who claims to be the first heir to the throne of <input placeholder="same mythical creature"> Kingdom, to fight against the Kapa-<input placeholder="kind of monster">, bioarms created by his enemies, if they want to return to their human form. In order to kill them, they have to make a specific sound called "Sarazanmai" which is produced only when the three of them <input placeholder="verb">, but the three boys cannot connect at first.
+      </p><p>
+      </p><p>In addition, one of their secrets is revealed to each other every time they emit the sound!
+      </p><p>
+      </p><p>They finally accept to take risks to collect the "Plates of <input placeholder="emotion">," given by Keppi when they defeat the <input placeholder="same mythical creature">-<input placeholder="same kind of monster">, and which can make their wishes come true. However, some trouble occurs over the plates...! Along the course of the fights against the <input placeholder="same mythical creature">-<input placeholder="same kind of monster">, their <input placeholder="adjective"> past and inner <input placeholder="plural noun"> keep getting revealed. This is the sarcastic fantasy of three boys who don't feel connected to their important ones, getting to realize the real meaning of <input placeholder="plural noun">.
+      </p><p>
+    </div>
+    <button>done!</button>
   </div>
 </div>
