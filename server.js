@@ -9,12 +9,31 @@ const multer = require('multer');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const http = require('http');
+const io = require('socket.io');
+const basicAuth = require('express-basic-auth');
+
+const auth = basicAuth({
+  challenge: true,
+  users: {
+    admin: process.env.PASSWORD,
+  },
+});
 
 const db = require('./config');
 
 const upload = multer();
 
 const app = express();
+const server = http.Server(app);
+const sockets = io(server);
+
+sockets.on('connection', (socket) => {
+  socket.on('comment', (data) => {
+    socket.emit('ok', true);
+    sockets.emit('comment', data);
+  });
+});
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
@@ -25,6 +44,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const categories = [
+  { id: null, name: 'none' },
   { id: 1, name: 'Current Season' },
   { id: 2, name: 'Oldies/Nostalgia' },
   { id: 3, name: "Boy's Love" },
@@ -34,7 +54,7 @@ const categories = [
   { id: 7, name: 'Dank Memes' },
 ];
 
-app.get('/', (_req, res) => {
+app.get('/', auth, (_req, res) => {
   const categorizeMadlib = (acc, madlib) => {
     acc
       .find(c => c.id === madlib.category).madlibs
@@ -53,24 +73,25 @@ app.get('/', (_req, res) => {
   });
 });
 
-app.get('/madlibs/new', (_req, res) => {
+app.get('/madlibs/new', auth, (_req, res) => {
   res.render('new', { categories });
 });
 
-app.get('/madlibs/:id', (req, res) => {
+app.get('/madlibs/:id', auth, (req, res) => {
   db.query('SELECT * FROM madlibs WHERE id = $1', [req.params.id], (err, result) => {
     if (err) {
       return res.render('error');
     }
     const madlib = result.rows[0];
-    madlib.madlib = madlib.madlib.replace(/\n/g, '</p><p>');
-    madlib.madlib = madlib.madlib.replace(/\[/g, "<input placeholder='");
-    madlib.madlib = madlib.madlib.replace(/\]/g, "'/>");
+    madlib.madlib = '<span>' + madlib.madlib;
+    madlib.madlib = madlib.madlib.replace(/\n/g, '</span></p><p><span>');
+    madlib.madlib = madlib.madlib.replace(/\[/g, "</span><data contenteditable placeholder='");
+    madlib.madlib = madlib.madlib.replace(/\]/g, "'></data><span>");
     return res.render('show', { madlib, categories });
   });
 });
 
-app.get('/madlibs/:id/edit', (req, res) => {
+app.get('/madlibs/:id/edit', auth, (req, res) => {
   db.query('SELECT * FROM madlibs WHERE id = $1', [req.params.id], (err, result) => {
     if (err) {
       return res.render('error');
@@ -79,7 +100,7 @@ app.get('/madlibs/:id/edit', (req, res) => {
   });
 });
 
-app.post('/madlibs/:id/update', (req, res) => {
+app.post('/madlibs/:id/update', auth, (req, res) => {
   db.query(
     'UPDATE madlibs SET title = $1, category = $2, madlib = $3 WHERE id = $4',
     [req.body.title, req.body.category, req.body.madlib, req.params.id],
@@ -92,7 +113,7 @@ app.post('/madlibs/:id/update', (req, res) => {
   );
 });
 
-app.post('/madlibs', upload.array(), (req, res) => {
+app.post('/madlibs', auth, upload.array(), (req, res) => {
   db.query('INSERT INTO madlibs (title, category, madlib) VALUES ($1, $2, $3) RETURNING *', [req.body.title, req.body.category, req.body.madlib], (err, result) => {
     if (err) {
       return res.render('error');
@@ -105,4 +126,4 @@ app.get('/play', (_req, res) => {
   res.render('play');
 });
 
-module.exports = app;
+module.exports = server;

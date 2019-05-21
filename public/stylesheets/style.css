@@ -6,3 +6,67 @@ body {
 a {
   color: #00B7FF;
 }
+
+textarea {
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 10em;
+}
+
+.comment {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transition: transform 10s linear;
+  white-space: nowrap;
+  color: white;
+  font-size: 96px;
+  /* text-shadow: black 1px 1px 0px, black -1px 1px 0px, black 1px -1px 0px, black -1px -1px 0px; */
+  -webkit-text-stroke: 2px black;
+}
+
+.play {
+  max-width: 500px;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  height: 100%;
+  justify-content: center;
+}
+
+#comment-message {
+  margin-bottom: 1em;
+  padding: 1em;
+  font-size: 16px;
+}
+
+#comment-message.error {
+  border: 1px solid red;
+}
+
+#comment-button {
+  padding: 1em;
+  font-size: 16px;
+}
+
+.madlib data {
+  display: inline-block;
+  min-width: 32px;
+  font-weight: bold;
+}
+
+.madlib data:empty:before {
+  content: attr(placeholder);
+}
+
+#hide:checked ~ p span {
+  display: none;
+}
+
+#hide:checked ~ p data {
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+}
