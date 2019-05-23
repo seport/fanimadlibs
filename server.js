@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -12,6 +13,7 @@ const logger = require('morgan');
 const http = require('http');
 const io = require('socket.io');
 const basicAuth = require('express-basic-auth');
+const wordsPath = require('word-list');
 
 const auth = basicAuth({
   challenge: true,
@@ -28,10 +30,39 @@ const app = express();
 const server = http.Server(app);
 const sockets = io(server);
 
+const profanities = ['word'];
+const words = fs.readFileSync(wordsPath);
+
+const regex = profanities.map(word => `\\b[^ ]*${
+  word
+    .split('')
+    .map(letter => letter
+      .replace(/a/g, '[a@4]')
+      .replace(/b/g, '[b68]')
+      .replace(/e/g, '[e3]')
+      .replace(/g/g, '[g6]')
+      .replace(/i/g, '[il1/\\|]')
+      .replace(/l/g, '[li1/\\|]')
+      .replace(/o/g, '[o0]')
+      .replace(/s/g, '[s5]')
+      .replace(/t/g, '[t7]'))
+    .join('[^a-n,^p-w,^y-z]*')
+}[^ ]*\\b`).join('|');
+
+const profanity = new RegExp(regex, 'gi');
+
 sockets.on('connection', (socket) => {
   socket.on('comment', (data) => {
+    const message = data.replace(profanity, (match) => {
+      const word = match.toLowerCase();
+      if (profanities.indexOf(word) >= 0 || words.indexOf(word) < 0) {
+        return 'nya';
+      }
+      return match;
+    });
+
     socket.emit('ok', true);
-    sockets.emit('comment', data);
+    sockets.emit('comment', message);
   });
 });
 
@@ -44,7 +75,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const categories = [
-  { id: null, name: 'none' },
+  { id: null, name: 'Uncategorized' },
   { id: 1, name: 'Current Season' },
   { id: 2, name: 'Oldies/Nostalgia' },
   { id: 3, name: "Boy's Love" },
@@ -83,10 +114,6 @@ app.get('/admin/madlibs/:id', auth, (req, res) => {
       return res.render('error');
     }
     const madlib = result.rows[0];
-    madlib.madlib = `<span>${madlib.madlib}`;
-    madlib.madlib = madlib.madlib.replace(/\n/g, '</span></p><p><span>');
-    madlib.madlib = madlib.madlib.replace(/\[/g, "</span><data contenteditable placeholder='");
-    madlib.madlib = madlib.madlib.replace(/\]/g, "'></data><span>");
     return res.render('show', { madlib, categories });
   });
 });
@@ -127,23 +154,12 @@ app.get('/', (_req, res) => {
 });
 
 app.get('/play', auth, (_req, res) => {
-  const categorizeMadlib = (acc, madlib) => {
-    acc
-      .find(c => c.id === madlib.category).madlibs
-      .push(madlib);
-    return acc;
-  };
-
-  const madlibsByCategory = categories
-    .filter(category => category.id)
-    .map(c => ({ ...c, madlibs: [] }));
-
   db.query('SELECT * FROM madlibs', (err, results) => {
     if (err) {
       return res.render('error');
     }
-    const madlibs = results.rows.reduce(categorizeMadlib, madlibsByCategory);
-    return res.render('play', { madlibs });
+    const madlibs = results.rows;
+    return res.render('play', { madlibs, categories });
   });
 });
 
