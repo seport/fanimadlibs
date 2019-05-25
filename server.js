@@ -13,6 +13,7 @@ const logger = require('morgan');
 const http = require('http');
 const io = require('socket.io');
 const basicAuth = require('express-basic-auth');
+const getAuth = require('basic-auth');
 // const wordsPath = require('word-list');
 
 const auth = basicAuth({
@@ -54,6 +55,9 @@ const slurs = 'pike?(ys?|ies)|pakis?|(ph|f)agg?s?([e0aio]ts?|oted|otry)|nigg?s?|
 const profanity = new RegExp(slurs, 'gi');
 
 sockets.on('connection', (socket) => {
+  const user = getAuth(socket.handshake);
+  const hax = user && basicAuth.safeCompare(user.pass, process.env.PASSWORD);
+
   let timeout;
 
   socket.on('comment', (data) => {
@@ -65,7 +69,7 @@ sockets.on('connection', (socket) => {
       timeout = null;
       socket.emit('ok', true);
       sockets.emit('comment', message);
-    }, 1000);
+    }, hax ? 0 : 1000);
   });
 });
 
