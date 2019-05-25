@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
-const fs = require('fs');
+// const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -13,7 +13,7 @@ const logger = require('morgan');
 const http = require('http');
 const io = require('socket.io');
 const basicAuth = require('express-basic-auth');
-const wordsPath = require('word-list');
+// const wordsPath = require('word-list');
 
 const auth = basicAuth({
   challenge: true,
@@ -30,36 +30,32 @@ const app = express();
 const server = http.Server(app);
 const sockets = io(server);
 
-const profanities = ['word'];
-const words = fs.readFileSync(wordsPath);
+// const profanities = [''];
+// const words = fs.readFileSync(wordsPath);
 
-const regex = profanities.map(word => `\\b[^ ]*${
-  word
-    .split('')
-    .map(letter => letter
-      .replace(/a/g, '[a@4]')
-      .replace(/b/g, '[b68]')
-      .replace(/e/g, '[e3]')
-      .replace(/g/g, '[g6]')
-      .replace(/i/g, '[il1/\\|]')
-      .replace(/l/g, '[li1/\\|]')
-      .replace(/o/g, '[o0]')
-      .replace(/s/g, '[s5]')
-      .replace(/t/g, '[t7]'))
-    .join('[^a-n,^p-w,^y-z]*')
-}[^ ]*\\b`).join('|');
+// const regex = profanities.map(word => `\\b[^ ]*${
+//   word
+//     .split('')
+//     .map(letter => letter
+//       .replace(/a/g, '[a@4]')
+//       .replace(/b/g, '[b68]')
+//       .replace(/e/g, '[e3]')
+//       .replace(/g/g, '[g6]')
+//       .replace(/i/g, '[il1/\\|]')
+//       .replace(/l/g, '[li1/\\|]')
+//       .replace(/o/g, '[o0]')
+//       .replace(/s/g, '[s5]')
+//       .replace(/t/g, '[t7]'))
+//     .join('[^a-n,^p-w,^y-z]*')
+// }[^ ]*\\b`).join('|');
 
-const profanity = new RegExp(regex, 'gi');
+const slurs = 'pike?(ys?|ies)|pakis?|(ph|f)agg?s?([e0aio]ts?|oted|otry)|nigg?s?|nigg?[aeoi]s?|(ph|f)[@a]gs?|n[i!j1e]+gg?(rs?|ett?e?s?|lets?|ress?e?s?|r[a0oe]s?|[ie@ao0!]rs?|r[o0]ids?|ab[o0]s?|erest)|j[!i]gg?[aer]+(boo?s?|b00?s?)|jigg?[aer]+(b[0o]ing)|p[0o]rch\\s*-?m[0o]nke?(ys?|ies?)|g(ooks?|00ks?)|k[iy]+kes?|b[ea]ne[ry]s?|(towel|rag)\\s*heads?|wet\\s*backs?|dark(e?y|ies?)|(shit|mud)\\s*-?skins?|tarbab(ys?|ies?)|ape\\s*-?fricans?|lesbos?|coons?(y|i?e?s?|er)|trann(ys?|ies?)|mignorants?|lady\\s*-?boys?|spics?|/?r?/?coon\\s*town|/?r?/?ni?1?ggers?|you\\s*(\'?re|r)gay|shit\\s*lords?|Homos?",  "groids?|chimpires?|mud\\s*childr?e?n?|n[1!i]gs?-?|gays?(est|ly|er)|dune\\s*coone?r?s?|high\\s*yellows?|shee?\\s*boons?|cock\\s*suckers?|tards?|retards?|retard\\*s?(ed|edly)|cunts?y?|dot\\s*heads?|china\\s*m[ae]n|queer\\s*bags?|NAMBLA|fucking\\s*(whores?)|puss(y|ies?)|ghey|whore\\s*mouth|fuck\\s*boys?|fat\\s*fucks?|obeasts?|fuck\\s*(wits?|tards?)",  "beetusbehemoths?|book\\s*fags?|shit\\s*(bags?|dicks?)|twats?|fupas?|holo\\s*hoaxe?s?|Muslimes?|dind[ous]|boot\\s*lips?|jig\\s*apes?|nig\\s*town|suspooks?"]';
+
+const profanity = new RegExp(slurs, 'gi');
 
 sockets.on('connection', (socket) => {
   socket.on('comment', (data) => {
-    const message = data.replace(profanity, (match) => {
-      const word = match.toLowerCase();
-      if (profanities.indexOf(word) >= 0 || words.indexOf(word) < 0) {
-        return 'nya';
-      }
-      return match;
-    });
+    const message = data.replace(profanity, 'nya');
 
     socket.emit('ok', true);
     sockets.emit('comment', message);
