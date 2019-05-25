@@ -54,11 +54,18 @@ const slurs = 'pike?(ys?|ies)|pakis?|(ph|f)agg?s?([e0aio]ts?|oted|otry)|nigg?s?|
 const profanity = new RegExp(slurs, 'gi');
 
 sockets.on('connection', (socket) => {
+  let timeout;
+
   socket.on('comment', (data) => {
     const message = data.replace(profanity, 'nya');
 
-    socket.emit('ok', true);
-    sockets.emit('comment', message);
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      timeout = null;
+      socket.emit('ok', true);
+      sockets.emit('comment', message);
+    }, 1000);
   });
 });
 
