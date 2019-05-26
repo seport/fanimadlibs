@@ -82,7 +82,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const categories = [
-  { id: null, name: 'Uncategorized' },
   { id: 1, name: 'Current Season' },
   { id: 2, name: 'Oldies/Nostalgia' },
   { id: 3, name: "Boy's Love" },
